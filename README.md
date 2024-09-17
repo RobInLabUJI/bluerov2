@@ -24,19 +24,40 @@ This repository contains the robot description and necessary launch files to des
 
 ## Installation 
 
+```bash
+sudo apt install -y ros-humble-ros-gz ros-humble-slider-publisher ros-humble-ros-ign-gazebo \
+                    ros-humble-ros-ign-bridge ros-humble-ros-ign-image
+```
 Clone the package and its dependencies (if from source) in your ROS 2 workspace `src` and compile with `colcon`
+```bash
+mkdir -p ros2_ws/src
+cd ros2_ws/src
+git clone https://github.com/RobInLabUJI/bluerov2
+git clone https://github.com/oKermorgant/simple_launch
+git clone https://github.com/oKermorgant/pose_to_tf
+git clone https://github.com/CentraleNantesROV/auv_control
+git clone https://github.com/CentraleNantesROV/thruster_manager
+cd ..
+source /opt/ros/humble/setup.bash
+colcon build
+```
 
 ## Running 
 
 To run a demonstration with the vehicle, you can run a Gazebo scenario, such as an empty world with buoyancy and sensors setup:
 
 ```bash
+source /opt/ros/humble/setup.bash
+source ros2_ws/install/setup.bash
 ros2 launch bluerov2_description world_launch.py
 ```
 
 and then spawn the robot with a GUI to control the thrusters:
 
 ```bash
+source /opt/ros/humble/setup.bash
+source ros2_ws/install/setup.bash
+export GZ_VERSION=fortress 
 ros2 launch bluerov2_description upload_bluerov2_launch.py sliders:=true
 ```
 
@@ -53,13 +74,22 @@ Gazebo will:
 
 Basic control is available in the [auv_control](https://github.com/CentraleNantesROV/auv_control) package
 
-In this case spawn the robot without manual sliders and run e.g. a cascaded PID controller:
+In this case spawn the robot without manual sliders:
 
 ```bash
+source /opt/ros/humble/setup.bash
+source ros2_ws/install/setup.bash
+export GZ_VERSION=fortress 
 ros2 launch bluerov2_description upload_bluerov2_launch.py
-ros2 launch bluerov2_control cascaded_pids_launch.py sliders:=true
 ```
 
+ and run e.g. a cascaded PID controller:
+ 
+```bash
+source /opt/ros/humble/setup.bash
+source ros2_ws/install/setup.bash
+ros2 launch bluerov2_control cascaded_pids_launch.py sliders:=true
+```
 
 ## License
 
